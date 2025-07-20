@@ -9,6 +9,7 @@
   "author": "Aroop",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "serverless-http": "^3.2.0"
   }
 }
