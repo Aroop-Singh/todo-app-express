@@ -1,0 +1,137 @@
+body{background-color: #0e0e0e; color: #dfdfdf;}
+
+#Main-heading{display: flex; justify-content: center; border-bottom: 1px solid white;}
+
+#Todo-list-container{background-color: #161515; margin: 5%;padding-bottom: 2%; border-radius: 20px;}
+
+#Add-todo-heading{display: flex; justify-content: center; padding-top: 2%;}
+
+#input-box-container{padding-bottom: 2%;}
+
+
+#input-box input[type="text"]{
+    padding: 10px; margin-left: 6%; width: 75%; 
+    border-radius: 5px; border: 1px solid #ccc;
+    font-size: 16px; background-color: #302c2c; color: #dfdfdf;
+    overflow-wrap: hidden; resize: none;
+}
+#input-box input:hover[type="text"]{background-color: #474040;}
+
+
+#Add-button button{
+    padding: 11px; width: 10%; font-size: 16px; 
+    border: none; border-radius: 5px; cursor: pointer;
+    background-color: #007bff; color: #dfdfdf;
+}
+#Add-button button:hover{background-color: #005bbc;}
+
+
+
+
+
+
+/* i copied these down stuffs need to work on them  */
+.classTodos {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  border-radius: 7px;
+  margin-bottom: 1%;
+  margin-left: 6%;
+  margin-right: 6%;
+  background-color: #313335;
+  padding: 5px;
+  gap: 10px; /* spacing between elements */
+  flex-wrap: nowrap; /* keeps it horizontal layout */
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Style the checkbox inside .todo-item */
+.classTodos input[type="checkbox"] {
+  appearance: none;           /* remove default OS styling */
+  width: 18px;
+  height: 18px;
+  margin: 10px 0px 0px 3px;
+  border: 5px;
+  border-radius: 5px;
+  background-color: #504a4a;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+}
+
+/* Checked state: show custom tick */
+.classTodos input[type="checkbox"]:checked {
+  background-color: #2e7634;
+  border: none;
+}
+
+.classTodos input[type="checkbox"]::after {
+  content: "✓";
+  position: absolute;
+  top: 0px;
+  left: 2px;
+  color: white;
+  font-size: 18px;
+  display: none;
+}
+
+.classTodos input[type="checkbox"]:checked::after {
+  display: block;
+}
+
+.classTodos h4 {
+  flex: 1; /* allow it to grow and fill space */
+  margin: 0;
+  padding: 10px 0px 0px 5px;
+  text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  color: white;
+}
+
+
+/* DELETE button */
+.btn-delete {
+  font-size: 15px; 
+  border: none; border-radius: 5px;
+  margin: 5px 0px 0px 0px; padding: 4px 6px 5px 5px;
+  background-color: #ff1717; color: #eeeeee;
+}
+.btn-delete:hover {
+  background-color: #9b0000;
+}
+
+/* EDIT button */
+.btn-edit {
+  font-size: 15px; 
+  border: none; border-radius: 5px;
+  margin: 5px 5px; padding: 4px 14px 5px 12px;
+  background-color: #ddad00; color: #eeeeee;
+}
+.btn-edit:hover {
+  background-color: #977b00;
+}
+
+/* SAVE button */
+.btn-save {
+  font-size: 15px; 
+  border: none; border-radius: 5px;
+  margin: 5px 5px; padding: 4px 10px 5px 10px;
+  background-color: #2c9835; color: #eeeeee;
+}
+.btn-save:hover {
+  background-color: #0f6e19;
+}
+
+/* Input field for editing */
+.edit-input {
+  flex: 1;
+  font-size: 15px;
+  margin: 5px 0px 0px 0px;
+  padding: 3px 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #504a50;
+  color: #eeeeee;
+}

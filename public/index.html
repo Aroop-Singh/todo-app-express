@@ -1,0 +1,47 @@
+<!DOCTYPE html>  
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+
+    <!-- Linking style sheet here -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Linking js script here -->
+    <script src="script.js"></script>
+
+    <!-- defining main heading and description here -->
+    <div id="Main-heading">
+        <h1>Todo App</h1>
+    </div>
+
+    <!-- Main todo container and all todos here -->
+    <div id="Todo-list-container">
+        <span>
+            <h2 id="Add-todo-heading">Add your chores here</h2>
+        </span>
+
+        <div id="input-box-container">
+            <span id="input-box">
+                <input type="text" placeholder="Add todo here">
+            </span>
+    
+            <span id="Add-button">
+                <button onclick="addTodo()">Add</button>
+            </span>
+
+
+        </div>
+
+        <div id="todos"></div>
+        
+    </div>
+
+
+    
+</body>
+
+</html>
