@@ -29,7 +29,7 @@ function addTodo() {
   todos.push({title: inputValue, completed: false})
 
   //This line below auto clear input box 
-  // inputBox.value = "" 
+  inputBox.value = "" 
   inputBox.focus()
     
   render()
