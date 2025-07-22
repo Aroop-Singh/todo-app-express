@@ -6,17 +6,11 @@ body{background-color: #0e0e0e; color: #dfdfdf;}
 
 #Add-todo-heading{display: flex; justify-content: center; padding-top: 2%;}
 
-#input-box-container{padding-bottom: 2%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-
-}
+#input-box-container{padding-bottom: 2%;}
 
 
 #input-box input[type="text"]{
-    padding: 10px; margin-left: 6%; width: 65%; 
+    padding: 10px; margin-left: 6%; width: 75%; 
     border-radius: 5px; border: 1px solid #ccc;
     font-size: 16px; background-color: #302c2c; color: #dfdfdf;
     overflow-wrap: hidden; resize: none;
@@ -25,7 +19,7 @@ body{background-color: #0e0e0e; color: #dfdfdf;}
 
 
 #Add-button button{
-    padding: 11px; width: auto; font-size: 16px; 
+    padding: 11px; width: 10%; font-size: 16px; 
     border: none; border-radius: 5px; cursor: pointer;
     background-color: #007bff; color: #dfdfdf;
 }
@@ -46,7 +40,7 @@ body{background-color: #0e0e0e; color: #dfdfdf;}
   background-color: #313335;
   padding: 5px;
   gap: 10px; /* spacing between elements */
-  flex-wrap: wrap; /* keeps it horizontal layout */
+  flex-wrap: nowrap; /* keeps it horizontal layout */
   overflow-wrap: break-word;
   word-break: break-word;
 }
@@ -76,13 +70,14 @@ body{background-color: #0e0e0e; color: #dfdfdf;}
   position: absolute;
   top: 0px;
   left: 2px;
-  color: white;
+  color: rgb(255, 255, 255);
   font-size: 18px;
   display: none;
 }
 
 .classTodos input[type="checkbox"]:checked::after {
   display: block;
+  
 }
 
 .classTodos h4 {
@@ -140,37 +135,4 @@ body{background-color: #0e0e0e; color: #dfdfdf;}
   border: 1px solid #ccc;
   background-color: #504a50;
   color: #eeeeee;
-}
-
-/* Mobile stuffs */
-@media (max-width: 1000px) {
-  #input-box input[type="text"] {
-    width: 100%;
-    margin-left: 0;
-    font-size: 14px;
-  }
-
-  #Add-button button {
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  .classTodos {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px;
-    margin-left: 3%;
-    margin-right: 3%;
-  }
-
-  .btn-edit,
-  .btn-delete,
-  .btn-save {
-    width: 100%;
-    margin: 5px 0;
-  }
-
-  .edit-input {
-    width: 100%;
-  }
 }
