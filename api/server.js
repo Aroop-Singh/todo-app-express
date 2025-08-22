@@ -1,18 +1,17 @@
-const express = require("express");
-const app = express();
-const serverless = require("serverless-http");
-const path = require("path");
+import jwt from "jsonwebtoken";
 
-app.use(express.static("public"));
+let users = []; // memory store (will reset on serverless cold start)
 
-// 👇 Add this route just after the middleware
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
+export default function handler(req, res) {
+  if (req.method === "POST") {
+    const { username, password } = req.body;
 
-app.get("/health", (req, res) => {
-  res.send("Server is healthy 🚀");
-});
+    if (!username || username.length < 5) {
+      return res.status(400).json({ message: "Username too short" });
+    }
 
-module.exports.handler = serverless(app);
-
+    users.push({ username, password });
+    return res.status(200).json({ message: "You are signed up" });
+  }
+  res.status(405).json({ message: "Method not allowed" });
+}
