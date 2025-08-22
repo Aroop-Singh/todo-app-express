@@ -4,19 +4,159 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo App</title>
-    
+
     <!-- Linking style sheet here -->
     <link rel="stylesheet" href="style.css">
 </head>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.6/axios.min.js"></script>
+<script>
+    window.onload = renderUI()
+    async function Signup(){
+        const username = document.getElementById("signupUsername").value
+        const password = document.getElementById("signupPassword").value
+        
+        // await under async function because it can take time 
+        await axios.post("http://localhost:3000/signup", {
+            username: username,
+            password: password
+        })
+        getUserInfo()
+        renderUI()
+
+        alert("You have signed up")
+    }
+
+    async function Signin(){
+        const username = document.getElementById("signinUsername").value
+        const password = document.getElementById("signinPassword").value
+
+        try {
+            const response = await axios.post("http://localhost:3000/signin", {
+                username,
+                password
+            })
+            localStorage.setItem("token", response.data.token)
+            alert("You are signed in")
+        } catch (err) {
+            if (err.response && err.response.status === 403) {
+                alert("Invalid username or password. Please try again or signup first.")
+            } else {
+                alert("Something went wrong while signing in")
+            }
+            console.error(err)
+        }
+        getUserInfo()
+        renderUI()
+    }
+
+
+    async function getUserInfo() {
+        const token = localStorage.getItem("token")
+        if (!token) {
+            console.log("No token found, user is not logged in")
+            return
+        }
+
+        try {
+            const response = await axios.get("http://localhost:3000/me", {
+                headers : { token }
+            })
+            document.getElementById("UserInfo").innerHTML = "" + response.data.username
+        } catch (err) {
+            console.error(err)
+            localStorage.removeItem("token") // agar token invalid hai to clear karo
+            alert("Session expired, please login again")
+        }
+        renderUI()
+    }
+    
+
+    function logout() {
+        localStorage.removeItem("token")
+        alert("You have logged out")
+        document.getElementById("UserInfo").innerHTML = ""
+        renderUI()
+    }
+
+    window.onload = renderUI()
+
+
+// render UI finally
+    function renderUI() {
+        const token = localStorage.getItem("token");
+        const authContainer = document.getElementById("auth-container");
+        const todoContainer = document.getElementById("Todo-list-container");
+        const userSection = document.getElementById("user-section");
+
+        if (!token) {
+            // case A: new user ya logout hone ke baad
+            authContainer.style.display = "flex";  // show login/signup
+            todoContainer.style.display = "none";  // hide todos
+            userSection.style.display = "none";    // hide logout section
+        } else {
+            // case B: token mila, ab backend se verify kar
+            axios.get("http://localhost:3000/me", { headers: { token } })
+            .then(res => {
+                // token valid
+                authContainer.style.display = "none";
+                todoContainer.style.display = "block";
+                userSection.style.display = "block";
+                document.getElementById("UserInfo").innerHTML = "" + res.data.username;
+            })
+            .catch(err => {
+                // token invalid/expired
+                localStorage.removeItem("token");
+                authContainer.style.display = "flex";
+                todoContainer.style.display = "none";
+                userSection.style.display = "none";
+            });
+        }
+        }
+
+
+
+</script>
+
 
 <body>
     <!-- Linking js script here -->
     <script src="script.js"></script>
 
-    <!-- defining main heading and description here -->
+    <!-- defining main heading, user and logout here -->
     <div id="Main-heading">
-        <h1>Todo App</h1>
+        <h1 id="app-title">Todo App</h1>
+
+        <div id="user-section">
+            <form>
+                <button type="button" onclick="logout()">Logout</button>
+            </form>
+            <div class="user-info-wrapper">
+                <h4>User:</h4>
+                <div id="UserInfo"></div>
+            </div>
+        </div>
     </div>
+
+
+<!-- login stuffs -->
+    <div id="auth-container">
+    <div class="auth-box">
+        <h3>Signup</h3>
+        <input id="signupUsername" type="text" placeholder="Username">
+        <input id="signupPassword" type="password" placeholder="Password">
+        <button onclick="Signup()">Submit</button>
+    </div>
+
+    <div class="auth-box">
+        <h3>Signin</h3>
+        <input id="signinUsername" type="text" placeholder="Username">
+        <input id="signinPassword" type="password" placeholder="Password">
+        <button onclick="Signin()">Submit</button>
+    </div>
+    </div>
+
 
     <!-- Main todo container and all todos here -->
     <div id="Todo-list-container">
@@ -26,7 +166,7 @@
 
         <div id="input-box-container">
             <span id="input-box">
-                <input type="text" placeholder="Add todo here">
+                <input id="todo-input" type="text" placeholder="Add todo here">
             </span>
     
             <span id="Add-button">
@@ -40,8 +180,7 @@
         
     </div>
 
-
-    
 </body>
 
 </html>
+
