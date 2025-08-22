@@ -3,7 +3,7 @@ const app = express();
 const serverless = require("serverless-http");
 const path = require("path");
 
-app.use(express.static("public"));
+app.use(express.static("pblic"));
 
 // 👇 Add this route just after the middleware
 app.get("/", (req, res) => {
