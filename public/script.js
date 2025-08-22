@@ -1,111 +1,62 @@
-// Delete button logic
-function deleteTodo(index){
-    todos.splice(index, 1)
-    render()
+async function Signup() {
+  const username = document.getElementById("signupUsername").value;
+  const password = document.getElementById("signupPassword").value;
+
+  await axios.post("/api/signup", { username, password });
+  alert("You have signed up");
+  renderUI();
 }
 
+async function Signin() {
+  const username = document.getElementById("signinUsername").value;
+  const password = document.getElementById("signinPassword").value;
 
-// defining render function 
-function render(){
-  document.querySelector("#todos").innerHTML = ""
-  for (let i=0; i<todos.length; i++){
-    const element = CreateTodo(todos[i], i)
-    document.querySelector("#todos").appendChild(element)
+  try {
+    const response = await axios.post("/api/signin", { username, password });
+    localStorage.setItem("token", response.data.token);
+    alert("You are signed in");
+    renderUI();
+  } catch (err) {
+    alert("Invalid credentials or error while signing in");
   }
 }
 
+async function getUserInfo() {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
 
-// adding todo text to todo structure
-let todos = [];
-function addTodo() {
-  const inputValue = document.querySelector("input").value.trim()
-  const inputBox = document.querySelector("input")
-
-  if (inputValue == ""){
-    alert("Please enter a task")
-    inputBox.focus()
-    return 
+  try {
+    const response = await axios.get("/api/me", {
+      headers: { Authorization: "Bearer " + token }
+    });
+    return response.data;
+  } catch (err) {
+    localStorage.removeItem("token");
+    return null;
   }
-  todos.push({title: inputValue, completed: false})
-
-  //This line below auto clear input box 
-  inputBox.value = "" 
-  inputBox.focus()
-    
-  render()
 }
 
-
-// Creating structure, strikethrough and Edit/sve for todos
-function CreateTodo(todo, index){
-  const div = document.createElement("div")
-  const h4 = document.createElement("h4")
-  const deleteBtn = document.createElement("button")
-  const editBtn = document.createElement("button")
-
-  // DELETE button
-  deleteBtn.innerHTML = "Delete"
-  deleteBtn.setAttribute("onclick", "deleteTodo(" + index + ")")
-  deleteBtn.classList.add("btn-delete")
-
-  // EDIT/SAVE toggle logic
-  editBtn.innerHTML = "Edit"
-  editBtn.classList.add("btn-edit")
-  let isEditing = false
-
-  editBtn.addEventListener("click", function () {
-    if (!isEditing) {
-      // Switch to Edit mode
-      const inputEdit = document.createElement("input")
-      inputEdit.type = "text"
-      inputEdit.value = todo.title
-      inputEdit.className = "edit-input"
-      div.replaceChild(inputEdit, h4)
-
-      editBtn.innerHTML = "Save"
-      editBtn.classList.remove("btn-edit")
-      editBtn.classList.add("btn-save")
-
-      isEditing = true
-    } else {
-      // Save mode
-      const newTitle = div.querySelector(".edit-input").value.trim()
-      if (newTitle !== "") {
-        todos[index].title = newTitle
-      }
-
-      editBtn.innerHTML = "Edit"
-      editBtn.classList.remove("btn-save")
-      editBtn.classList.add("btn-edit")
-
-      isEditing = false
-      render()
-    }
-  })
-
-  // Checkbox
-  const checkbox = document.createElement("input")
-  checkbox.type = "checkbox"
-  checkbox.checked = todo.completed || false
-  checkbox.addEventListener("change", function () {
-    todos[index].completed = checkbox.checked
-    render()
-  })
-
-  h4.innerText = todo.title
-  if (todo.completed){
-    h4.style.color = "#eeeeee"
-    h4.style.textDecoration = "line-through"
-  }
-
-  // Append elements
-  div.append(checkbox)
-  div.append(h4)
-  div.append(deleteBtn)
-  div.append(editBtn)
-  div.className = "classTodos"
-
-  return div
+function logout() {
+  localStorage.removeItem("token");
+  alert("You have logged out");
+  renderUI();
 }
 
+async function renderUI() {
+  const user = await getUserInfo();
+  const authSection = document.getElementById("authSection");
+  const todoSection = document.getElementById("todoSection");
+  const userInfo = document.getElementById("UserInfo");
 
+  if (user) {
+    authSection.style.display = "none";
+    todoSection.style.display = "block";
+    userInfo.innerText = `Welcome ${user.username}`;
+  } else {
+    authSection.style.display = "block";
+    todoSection.style.display = "none";
+    userInfo.innerText = "";
+  }
+}
+
+renderUI();
