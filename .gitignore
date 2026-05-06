@@ -1,0 +1,29 @@
+# System
+.DS_Store
+
+# Env
+.env
+server/.env
+
+# Logs
+logs
+*.log
+
+# Node
+node_modules
+
+# Build
+dist
+dist-ssr
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# Misc
+*.local
+
+server/config/db_password
+
+
