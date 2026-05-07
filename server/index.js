@@ -19,14 +19,14 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
     credentials: true,
   })
 );
 
 app.use(
   session({
-    secret: "secretkey",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
   })
@@ -63,7 +63,7 @@ app.get(
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    successRedirect: "http://localhost:5173/todos",
+    successRedirect: `${process.env.FRONTEND_URL}/todos`,
     failureRedirect: "/login",
   })
 );
@@ -85,7 +85,7 @@ app.get("/login/success", (req, res) => {
 // LOGOUT
 app.get("/logout", (req, res) => {
   req.logout(() => {
-    res.redirect("http://localhost:5173");
+    res.redirect(process.env.FRONTEND_URL);
   });
 });
 
