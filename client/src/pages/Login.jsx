@@ -7,7 +7,7 @@ function Login() {
     <div>
       <h1>Welcome to Todo App</h1>
 
-      <a href="http://localhost:8000/auth/google">
+      <a href="https://todov2.onrender.com/auth/google">
         <button>Login with Google</button>
       </a>
 

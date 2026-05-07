@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000/api/todos";
+const BASE_URL = "https://todov2.onrender.com";
 
 export const getTodos = async () => {
   const res = await fetch(BASE_URL);
