@@ -13,6 +13,18 @@ dotenv.config();
 
 const app = express();
 
+
+// Middleware
+app.use(express.json());
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
+
+
 // for google auth
 app.set("trust proxy", 1);
 
@@ -30,17 +42,6 @@ app.use(
     },
   })
 );
-
-// Middleware
-app.use(express.json());
-
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true,
-  })
-);
-
 
 app.use(passport.initialize());
 app.use(passport.session());
