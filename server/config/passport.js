@@ -9,7 +9,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://todov2.onrender.com/auth/google/callback",
+      callbackURL: "https://todo-app-express-backend-yul8.onrender.com/auth/google/callback",
     },
 
     async (accessToken, refreshToken, profile, done) => {
