@@ -103,44 +103,64 @@ app.get("/logout", (req, res) => {
 
 // ================= TODO ROUTES =================
 
-// GET TODOS
+// Middleware to get user ID (works for both Google auth and guests)
+const getUser = (req) => {
+  // If logged in with Google, use their Google ID
+  if (req.user && req.user.id) {
+    return req.user.id;
+  }
+  // If guest, use the guest ID from the request header
+  return req.headers['x-guest-id'] || 'anonymous';
+};
+
+// GET TODOS - Only get todos for this user
 app.get("/api/todos", async (req, res) => {
-  const todos = await Todo.find();
+  const user = getUser(req);
+  const todos = await Todo.find({ user: user });
   res.json(todos);
 });
 
-// CREATE TODO
+// CREATE TODO - Attach user to the todo
 app.post("/api/todos", async (req, res) => {
+  const user = getUser(req);
   const newTodo = await Todo.create({
     title: req.body.title,
+    completed: false,
+    user: user  // This is the key change!
   });
 
   res.status(201).json(newTodo);
 });
 
-// UPDATE TODO
+// UPDATE TODO - Only if it belongs to this user
 app.put("/api/todos/:id", async (req, res) => {
+  const user = getUser(req);
   const { title, completed } = req.body;
 
-  await Todo.findByIdAndUpdate(req.params.id, {
-    title,
-    completed,
+  const todo = await Todo.findOneAndUpdate(
+    { _id: req.params.id, user: user },  // Only update if it belongs to this user
+    { title, completed },
+    { new: true }
+  );
+
+  if (!todo) {
+    return res.status(404).json({ error: "Todo not found" });
+  }
+
+  res.json({ success: true });
+});
+
+// DELETE TODO - Only if it belongs to this user
+app.delete("/api/todos/:id", async (req, res) => {
+  const user = getUser(req);
+  const todo = await Todo.findOneAndDelete({ 
+    _id: req.params.id, 
+    user: user  // Only delete if it belongs to this user
   });
 
-  res.json({ success: true });
-});
-
-// DELETE TODO
-app.delete("/api/todos/:id", async (req, res) => {
-  await Todo.findByIdAndDelete(req.params.id);
+  if (!todo) {
+    return res.status(404).json({ error: "Todo not found" });
+  }
 
   res.json({ success: true });
-});
-
-
-// START SERVER
-const PORT = process.env.PORT || 8000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on ${PORT}`);
 });

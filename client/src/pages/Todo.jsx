@@ -8,15 +8,45 @@ import {
   deleteTodo,
 } from "../api/todos";
 
+const API_URL = import.meta.env.VITE_API_URL || 
+"https://todo-app-express-backend-yul8.onrender.com";
+
 function App() {
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
 
-  // Fetch todos on load
+  // Check if user is logged in on component mount
   useEffect(() => {
-    getTodos().then(setTodos);
+    // Check Google auth status
+    fetch(`${API_URL}/login/success`, {
+      credentials: 'include'
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.user) {
+          // Store user info for the API calls
+          localStorage.setItem('user', JSON.stringify(data.user));
+        } else {
+          // For guests, ensure we have a guest ID
+          if (!localStorage.getItem('guestId')) {
+            const guestId = 'guest_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('guestId', guestId);
+          }
+        }
+      })
+      .catch(err => {
+        // If fetch fails, still set up guest ID
+        if (!localStorage.getItem('guestId')) {
+          const guestId = 'guest_' + Math.random().toString(36).substr(2, 9);
+          localStorage.setItem('guestId', guestId);
+        }
+      })
+      .finally(() => {
+        // Load todos after authentication check
+        getTodos().then(setTodos);
+      });
   }, []);
 
   const addTodo = async () => {
