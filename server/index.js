@@ -164,3 +164,10 @@ app.delete("/api/todos/:id", async (req, res) => {
 
   res.json({ success: true });
 });
+
+// START SERVER
+const PORT = process.env.PORT || 8000;
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on ${PORT}`);
+});
